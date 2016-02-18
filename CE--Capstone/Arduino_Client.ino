@@ -22,6 +22,7 @@ IPAddress remoteIp(172,20,10,5);
 
 int port = 37899;
 
+// PINS NEED TO BE UPDATED!
 int speed1 = 12;
 int motor1 = 13;
 int speed2 =11;
@@ -149,7 +150,7 @@ void checkMessage(){
     // commands for moving the robot
     
     // turn left
-    if(message == "a" or message == "A" or message == "left"){
+    if(message == "left"){
       digitalWrite(motor1, LOW);
       digitalWrite(motor2, HIGH);
       analogWrite(speed1, 0);
@@ -158,7 +159,7 @@ void checkMessage(){
     }
 
     // turn right
-    if(message == "d" or message == "D" or message == "right"){
+    if(message == "right"){
       digitalWrite(motor1, HIGH);
       digitalWrite(motor2, LOW);
       analogWrite(speed1, 200);
@@ -167,7 +168,7 @@ void checkMessage(){
     }
     
     // turn forward
-    if(message == "w" or message == "W" or message == "up"){
+    if(message == "up"){
       digitalWrite(motor1, HIGH);
       digitalWrite(motor2, HIGH);
       analogWrite(speed1, 100);
@@ -177,12 +178,20 @@ void checkMessage(){
 
     
     // turn backward
-    if(message == "s" or message == "S" or message == "down"){
+    if(message == "down"){
       digitalWrite(motor1, LOW);
       digitalWrite(motor2, LOW);
       analogWrite(speed1, 100);
       analogWrite(speed2, 100);
       delay(5000);
+    }
+
+    // stop
+    if(message == "stop"){
+      digitalWrite(motor1, LOW);
+      digitalWrite(motor2, LOW);
+      analogWrite(speed1, 0);
+      analogWrite(speed2, 0);  
     }
 }
 
