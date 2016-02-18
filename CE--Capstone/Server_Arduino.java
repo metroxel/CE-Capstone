@@ -24,7 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class Server_Arduino extends JFrame implements KeyListener {
+public class Server_Arduino extends JFrame {
 
 	private JTextField userText;
 	private JTextArea chatWindow;
@@ -42,17 +42,52 @@ public class Server_Arduino extends JFrame implements KeyListener {
 		super("Semi-Autonomous User Guided Robot");
 		makeMenus();
 
-		addKeyListener(this);
+		// addKeyListener(this);
 		// setFocusable(this);
 		setFocusTraversalKeysEnabled(false);
 
 		userText = new JTextField();
 		userText.setEditable(false);
-		userText.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				sendMessage(event.getActionCommand());
-				userText.setText("");
+		/*
+		 * userText.addActionListener(new ActionListener() { public void
+		 * actionPerformed(ActionEvent event) {
+		 * sendMessage(event.getActionCommand()); userText.setText(""); } });
+		 */
+		userText.addKeyListener(new KeyListener() {
+
+			// key pressed accounts for if key is released
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				int c = e.getKeyCode();
+
+				if (c == KeyEvent.VK_UP) {
+					sendMessage("up");
+
+				} else if (c == KeyEvent.VK_DOWN) {
+					sendMessage("down");
+
+				} else if (c == KeyEvent.VK_LEFT) {
+					sendMessage("left");
+
+				} else if (c == KeyEvent.VK_RIGHT) {
+					sendMessage("right");
+				}
+
 			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				sendMessage("stop");
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
 		});
 
 		add(userText, BorderLayout.NORTH);
@@ -92,15 +127,17 @@ public class Server_Arduino extends JFrame implements KeyListener {
 		help.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane
-						.showMessageDialog(getContentPane(), new JLabel(
-								"<html><u>Directions for User Control </u> "
-										+ "<ul> Move Forward : w or W  <p>"
-										+ "Move Backward : s or S <p>"
-										+ "Turn Right : d or D <p>"
-										+ "Turn Left : a or A <p> "
-										+ "Quit : q or Q <p>"
-										+ "Stop : any key not listed <p>"
-										+ "</html> "), "User Controls",
+						.showMessageDialog(
+								getContentPane(),
+								new JLabel(
+
+										"<html><u>Directions for User Control </u><br>"
+												+ " Hold down the given arrow key to move the robot. <br>Release the key to stop.<p>"
+												+ "<ul> Move Forward : Up arrow  <p> <br>"
+												+ "Move Backward : Down arrow <p><br>"
+												+ "Turn Right : Right arrow <p><br>"
+												+ "Turn Left : Left arrow <p> "
+												+ "</html> "), "User Controls",
 								JOptionPane.PLAIN_MESSAGE);
 			}
 		});
@@ -137,26 +174,22 @@ public class Server_Arduino extends JFrame implements KeyListener {
 
 	}
 
-	public void keyPressed(KeyEvent e) {
-		int c = e.getKeyCode();
-
-		if (c == KeyEvent.VK_LEFT) {
-			message = "left";
-		} else if (c == KeyEvent.VK_RIGHT) {
-			message = "right";
-		} else if (c == KeyEvent.VK_UP) {
-			message = "up";
-		} else if (c == KeyEvent.VK_DOWN) {
-			message = "down";
-		}
-	}
-
-	public void keyTyped(KeyEvent e) {
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-
+	/*
+	 * public void keyPressed(KeyEvent e) { int c = e.getKeyCode(); boolean
+	 * keyPressed = true;
+	 * 
+	 * while (keyPressed) { if (c == KeyEvent.VK_LEFT) { message = "left"; }
+	 * else if (c == KeyEvent.VK_RIGHT) { message = "right"; } else if (c ==
+	 * KeyEvent.VK_UP) { message = "up"; } else if (c == KeyEvent.VK_DOWN) {
+	 * message = "down"; } else if (c == KeyEvent.KEY_RELEASED) { keyPressed =
+	 * false; } }
+	 * 
+	 * }
+	 * 
+	 * public void keyTyped(KeyEvent e) { }
+	 * 
+	 * public void keyReleased(KeyEvent e) { }
+	 */
 	private void waitForConnection() throws IOException {
 
 		showMessage("Waiting for someone to connect...");
